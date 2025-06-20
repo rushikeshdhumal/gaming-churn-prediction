@@ -1,6 +1,6 @@
 # Gaming Player Behavior Analysis & Churn Prediction
 
-A comprehensive data science project analyzing gaming player behavior patterns and predicting player churn using machine learning models. This project demonstrates end-to-end data science workflow from data collection to model deployment.
+A comprehensive data science project analyzing gaming player behavior patterns and predicting player churn using machine learning models. This project demonstrates an end-to-end data science workflow from data collection to model deployment.
 
 ## 🎮 Project Overview
 
@@ -111,7 +111,7 @@ cd gaming-churn-prediction
 
 ### 2. Set Up Environment
 ```bash
-# Create virtual environment
+# Create a virtual environment
 python -m venv venv
 source venv/bin/activate  # On Windows: venv\Scripts\activate
 
@@ -251,10 +251,8 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 **Your Name** - your.email@example.com
 
-Project Link: [https://github.com/your-username/gaming-churn-prediction](https://github.com/your-username/gaming-churn-prediction)
+Project Link: [https://github.com/rushikeshdhumal/gaming-churn-prediction](https://github.com/rushikeshdhumal/gaming-churn-prediction)
 
 ---
 
 ⭐ **Star this repository if you found it helpful!**
-
-*This project demonstrates advanced data science skills including statistical analysis, machine learning, and business insight generation. Perfect for data science portfolio and internship applications.*
