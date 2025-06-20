@@ -1,0 +1,65 @@
+# Gaming Player Behavior Analysis & Churn Prediction
+# Requirements file for Python dependencies
+
+# Core Data Science Libraries
+pandas>=1.5.0
+numpy>=1.21.0
+scipy>=1.9.0
+
+# Machine Learning
+scikit-learn>=1.1.0
+xgboost>=1.6.0
+
+# Data Visualization
+matplotlib>=3.5.0
+seaborn>=0.11.0
+plotly>=5.10.0
+
+# Database
+sqlite3
+
+# API and Web Requests
+requests>=2.28.0
+urllib3>=1.26.0
+
+# Jupyter and Development
+jupyter>=1.0.0
+ipykernel>=6.15.0
+notebook>=6.4.0
+
+# Utilities
+python-dateutil>=2.8.0
+pytz>=2022.1
+tqdm>=4.64.0
+
+# Data Processing
+openpyxl>=3.0.0  # For Excel file handling
+xlrd>=2.0.0      # For reading Excel files
+
+# Statistical Analysis
+statsmodels>=0.13.0
+
+# Optional: For enhanced visualizations
+kaleido>=0.2.1   # For plotly static image export
+
+# Development and Testing
+pytest>=7.0.0
+pytest-cov>=3.0.0
+black>=22.0.0
+flake8>=5.0.0
+
+# Configuration Management
+python-dotenv>=0.19.0
+configparser>=5.3.0
+
+# Logging
+loguru>=0.6.0
+
+# Performance Monitoring
+memory-profiler>=0.60.0
+psutil>=5.9.0
+
+# Version Information
+# Python >= 3.8 required
+# Compatible with Google Colab environment
+# All packages available via pip install
