@@ -385,37 +385,4 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 Project Link: [https://github.com/rushikeshdhumal/gaming-churn-prediction](https://github.com/rushikeshdhumal/gaming-churn-prediction)
 
----
-
-## 🎯 Project Highlights for Portfolio
-
-This project demonstrates:
-
-### **Technical Skills**
-- ✅ **End-to-end Data Science**: Collection → Analysis → Modeling → Deployment
-- ✅ **Advanced ML**: Hyperparameter tuning, cross-validation, ensemble methods
-- ✅ **Statistical Analysis**: Hypothesis testing, correlation analysis, survival analysis
-- ✅ **Feature Engineering**: 25+ behavioral and engagement features
-- ✅ **Production Code**: Error handling, logging, testing, documentation
-
-### **Business Acumen**
-- ✅ **ROI Analysis**: $847K+ potential annual savings identified
-- ✅ **Strategic Thinking**: Immediate, medium, and long-term recommendations
-- ✅ **Industry Knowledge**: Gaming metrics, player lifecycle, retention strategies
-- ✅ **Stakeholder Communication**: Executive summary, technical documentation
-
-### **Software Engineering**
-- ✅ **Package Development**: Professional setup.py, CLI tools, installable package
-- ✅ **Database Design**: SQLite schema, views, indexes, data validation
-- ✅ **API Development**: Real-time prediction interface
-- ✅ **Deployment Ready**: Model serving, monitoring, batch processing
-
-### **Data Management**
-- ✅ **Large Dataset Handling**: 319MB → 23MB sampling strategy
-- ✅ **Multi-source Integration**: APIs, CSVs, synthetic data
-- ✅ **Data Quality**: Validation, cleaning, statistical integrity
-- ✅ **Reproducibility**: Seeded random processes, documented methodology
-
----
-
 ⭐ **Star this repository if you found it helpful!**
