@@ -205,12 +205,19 @@ data/interim/*
 !data/interim/.gitkeep
 
 # Raw data - allow small sample files, ignore large datasets
-data/raw/*.csv
 data/raw/*.json
 data/raw/*.xlsx
 data/raw/*.zip
-!data/raw/sample_*.csv
 !data/raw/README.md
+
+# Large data files (download separately)
+data/raw/steam_games_full.csv
+
+# Keep sample files
+!data/raw/steam_games.csv
+!data/raw/steam_games_sample.csv
+!data/raw/game_recommendations.csv
+!data/raw/player_data_synthetic.csv
 
 # Database files
 *.db
