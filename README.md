@@ -176,7 +176,7 @@ pip install -e .
 ### 3. Configure Steam API (Optional)
 ```bash
 # Create .env file with your Steam API key
-echo "STEAM_API_KEY=C39A1207334E1D479D532D9D4FF9D222" > .env
+echo "STEAM_API_KEY=YOUR_STEAM_API_KEY_HERE" > .env
 ```
 
 ### 4. Initialize Database
