@@ -19,7 +19,7 @@ from datetime import datetime
 from typing import List, Dict, Optional
 
 # Configuration
-STEAM_API_KEY = "C39A1207334E1D479D532D9D4FF9D222"
+STEAM_API_KEY = "YOUR_STEAM_API_KEY_HERE"
 BASE_URL = "http://api.steampowered.com/"
 STORE_API_URL = "https://store.steampowered.com/api/appdetails"
 RATE_LIMIT_DELAY = 1.5  # seconds between requests
