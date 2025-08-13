@@ -16,7 +16,7 @@ seaborn>=0.11.0
 plotly>=5.10.0
 
 # Database
-sqlite3
+# sqlite3 is included in Python standard library
 
 # API and Web Requests
 requests>=2.28.0
@@ -33,14 +33,14 @@ pytz>=2022.1
 tqdm>=4.64.0
 
 # Data Processing
-openpyxl>=3.0.0  # For Excel file handling
-xlrd>=2.0.0      # For reading Excel files
+openpyxl>=3.0.0
+xlrd>=2.0.0
 
 # Statistical Analysis
 statsmodels>=0.13.0
 
 # Optional: For enhanced visualizations
-kaleido>=0.2.1   # For plotly static image export
+kaleido>=0.2.1
 
 # Development and Testing
 pytest>=7.0.0
@@ -50,7 +50,6 @@ flake8>=5.0.0
 
 # Configuration Management
 python-dotenv>=0.19.0
-configparser>=5.3.0
 
 # Logging
 loguru>=0.6.0
