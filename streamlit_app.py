@@ -26,15 +26,17 @@ warnings.filterwarnings('ignore')
 project_root = Path(__file__).parent
 sys.path.insert(0, str(project_root))
 
-try:
-    from src.data.data_collector import DataCollectionPipeline, SteamAPICollector, SyntheticDataGenerator
-    from src.features.feature_engineering import FeatureEngineer
-    from src.models.train_model import ModelTrainer
-    from src.data.data_processor import DataCleaner, DataValidator
+# try:
+from src.data.data_collector import DataCollectionPipeline, SteamAPICollector, SyntheticDataGenerator
+from src.features.feature_engineering import FeatureEngineer
+from src.models.train_model import ModelTrainer
+from src.data.data_processor import DataCleaner, DataValidator
+'''
 except ImportError:
     st.error("⚠️ Project modules not found. Please run from project root directory.")
     st.stop()
-
+'''
+    
 # Page configuration
 st.set_page_config(
     page_title="Gaming Churn Prediction Dashboard",
