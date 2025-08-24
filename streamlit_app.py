@@ -243,28 +243,214 @@ def show_overview(df, steam_games):
         - **Real-time Monitoring**: Automated alert system
         """)
     
-    # Data sources visualization
+    # FIXED: Data sources visualization
     st.subheader("📊 Data Sources Overview")
     
-    sources_data = {
-        'Source': ['Steam API', 'Kaggle - Steam Games', 'Kaggle - User Reviews', 'Synthetic Players'],
-        'Records': [8, 8500 if steam_games is not None else 0, 75000, len(df)],
-        'Type': ['Real-time API', 'Static Dataset', 'Static Dataset', 'Generated'],
-        'Purpose': ['Game metadata', 'Game catalog', 'User preferences', 'Behavior modeling']
+    # Get actual data counts dynamically
+    def get_actual_data_counts(df, steam_games):
+        """Get real data counts from available sources"""
+        counts = {
+            'Synthetic Players': len(df) if df is not None else 0,
+            'Demo Games': 5,  # Popular games used in demo
+            'Generated Features': len(df.columns) if df is not None else 0,
+        }
+        
+        # Check if we have actual Steam games data
+        if steam_games is not None and len(steam_games) > 0:
+            counts['Steam Games Dataset'] = len(steam_games)
+        else:
+            counts['Steam API Available'] = 1  # Show API availability
+        
+        # Check for processed data files
+        processed_path = Path("data/processed")
+        if processed_path.exists():
+            csv_files = list(processed_path.glob("*.csv"))
+            if csv_files:
+                counts['Processed Files'] = len(csv_files)
+        
+        return counts
+    
+    # Get dynamic data counts
+    data_counts = get_actual_data_counts(df, steam_games)
+    
+    # Create updated sources data with proper types
+    source_names = list(data_counts.keys())
+    record_counts = list(data_counts.values())
+    
+    # Map source types
+    type_mapping = {
+        'Synthetic Players': 'Generated Data',
+        'Demo Games': 'Sample Data',
+        'Generated Features': 'Engineered Features',
+        'Steam Games Dataset': 'External Dataset',
+        'Steam API Available': 'Real-time API',
+        'Processed Files': 'Processed Data'
     }
     
-    sources_df = pd.DataFrame(sources_data)
+    source_types = [type_mapping.get(name, 'Other') for name in source_names]
     
+    sources_df = pd.DataFrame({
+        'Source': source_names,
+        'Records': record_counts,
+        'Type': source_types,
+        'Status': ['✅ Active'] * len(source_names)
+    })
+    
+    # Create more informative chart
     fig = px.bar(sources_df, x='Source', y='Records', color='Type',
-                 title="Data Sources and Record Counts",
-                 labels={'Records': 'Number of Records'})
-    fig.update_layout(height=400)
+                 title="Current Data Sources and Record Counts",
+                 labels={'Records': 'Number of Records'},
+                 text='Records',
+                 color_discrete_sequence=px.colors.qualitative.Set3)
+    fig.update_traces(texttemplate='%{text}', textposition='outside')
+    fig.update_layout(height=400, showlegend=True)
+    fig.update_xaxis(tickangle=45)
     st.plotly_chart(fig, use_container_width=True)
     
-    # Architecture diagram
+    # Add data summary table
+    st.write("**📋 Data Source Details:**")
+    summary_df = sources_df[['Source', 'Records', 'Type', 'Status']]
+    st.dataframe(summary_df, use_container_width=True, hide_index=True)
+    
+    # FIXED: Architecture diagram
     st.subheader("🏗️ System Architecture")
-    st.image("https://via.placeholder.com/800x400/1f77b4/ffffff?text=Data+Pipeline+Architecture", 
-             caption="End-to-end ML pipeline from data collection to deployment")
+    
+    def create_architecture_diagram():
+        """Create interactive system architecture diagram"""
+        
+        # Define pipeline components with coordinates
+        components = {
+            'Data Sources': {'x': 1, 'y': 4, 'color': '#FF6B6B', 'icon': '📊'},
+            'Steam API': {'x': 0.5, 'y': 5, 'color': '#FF6B6B', 'icon': '🎮'},
+            'Synthetic Data': {'x': 1.5, 'y': 5, 'color': '#FF6B6B', 'icon': '🔢'},
+            
+            'Data Processing': {'x': 3, 'y': 4, 'color': '#4ECDC4', 'icon': '🔧'},
+            'Data Cleaning': {'x': 2.5, 'y': 5, 'color': '#4ECDC4', 'icon': '🧹'},
+            'Validation': {'x': 3.5, 'y': 5, 'color': '#4ECDC4', 'icon': '✅'},
+            
+            'Feature Engineering': {'x': 5, 'y': 4, 'color': '#45B7D1', 'icon': '⚙️'},
+            'Behavioral Features': {'x': 4.5, 'y': 5, 'color': '#45B7D1', 'icon': '📈'},
+            'Risk Features': {'x': 5.5, 'y': 5, 'color': '#45B7D1', 'icon': '⚠️'},
+            
+            'Model Training': {'x': 7, 'y': 4, 'color': '#96CEB4', 'icon': '🤖'},
+            'Random Forest': {'x': 6.5, 'y': 5, 'color': '#96CEB4', 'icon': '🌳'},
+            'XGBoost': {'x': 7.5, 'y': 5, 'color': '#96CEB4', 'icon': '🚀'},
+            
+            'Model Evaluation': {'x': 9, 'y': 4, 'color': '#FFEAA7', 'icon': '📊'},
+            'Performance Metrics': {'x': 8.5, 'y': 5, 'color': '#FFEAA7', 'icon': '📏'},
+            'Business Impact': {'x': 9.5, 'y': 5, 'color': '#FFEAA7', 'icon': '💼'},
+            
+            'Deployment': {'x': 11, 'y': 4, 'color': '#DDA0DD', 'icon': '🚀'},
+            'Streamlit App': {'x': 10.5, 'y': 5, 'color': '#DDA0DD', 'icon': '💻'},
+            'Predictions API': {'x': 11.5, 'y': 5, 'color': '#DDA0DD', 'icon': '🔮'},
+            
+            'Database': {'x': 6, 'y': 2, 'color': '#FFB347', 'icon': '🗃️'},
+            'SQLite': {'x': 5.5, 'y': 1, 'color': '#FFB347', 'icon': '💾'},
+            'Model Storage': {'x': 6.5, 'y': 1, 'color': '#FFB347', 'icon': '🏪'},
+        }
+        
+        # Create the plot
+        fig = go.Figure()
+        
+        # Add component nodes
+        for name, props in components.items():
+            fig.add_trace(go.Scatter(
+                x=[props['x']],
+                y=[props['y']],
+                mode='markers+text',
+                marker=dict(size=40, color=props['color'], line=dict(width=2, color='white')),
+                text=f"{props['icon']}<br>{name}",
+                textposition="middle center",
+                textfont=dict(size=10, color='white', family="Arial Black"),
+                name=name,
+                showlegend=False,
+                hovertemplate=f"<b>{name}</b><br>Component: {props['icon']}<extra></extra>"
+            ))
+        
+        # Add flow arrows (connections)
+        connections = [
+            ('Data Sources', 'Data Processing'),
+            ('Data Processing', 'Feature Engineering'),
+            ('Feature Engineering', 'Model Training'),
+            ('Model Training', 'Model Evaluation'),
+            ('Model Evaluation', 'Deployment'),
+            ('Data Processing', 'Database'),
+            ('Feature Engineering', 'Database'),
+            ('Model Training', 'Database'),
+        ]
+        
+        for start, end in connections:
+            start_pos = components[start]
+            end_pos = components[end]
+            
+            # Add arrow annotation
+            fig.add_annotation(
+                x=end_pos['x'], y=end_pos['y'],
+                ax=start_pos['x'], ay=start_pos['y'],
+                xref='x', yref='y',
+                axref='x', ayref='y',
+                arrowhead=2,
+                arrowsize=1.5,
+                arrowwidth=2,
+                arrowcolor='gray',
+                showarrow=True
+            )
+        
+        # Update layout
+        fig.update_layout(
+            title={
+                'text': "🏗️ Gaming Churn Prediction - System Architecture",
+                'x': 0.5,
+                'font': {'size': 20}
+            },
+            xaxis=dict(range=[0, 12], showgrid=False, showticklabels=False, zeroline=False),
+            yaxis=dict(range=[0, 6], showgrid=False, showticklabels=False, zeroline=False),
+            height=500,
+            plot_bgcolor='rgba(0,0,0,0)',
+            paper_bgcolor='rgba(0,0,0,0)'
+        )
+        
+        return fig
+    
+    # Create and display the architecture diagram
+    arch_fig = create_architecture_diagram()
+    st.plotly_chart(arch_fig, use_container_width=True)
+    
+    # Add architecture description
+    st.markdown("""
+    **🔧 System Components:**
+    - **🎮 Data Sources**: Steam API integration and synthetic player data generation
+    - **🔧 Data Processing**: Automated cleaning, validation, and quality checks  
+    - **⚙️ Feature Engineering**: Advanced behavioral and risk feature creation
+    - **🤖 Model Training**: Ensemble ML approach with multiple algorithms
+    - **📊 Model Evaluation**: Performance metrics and business impact analysis
+    - **🚀 Deployment**: Interactive Streamlit dashboard and prediction API
+    - **🗃️ Database**: SQLite storage for players, games, and predictions
+    """)
+    
+    # Add technical stack info
+    with st.expander("🛠️ Technical Stack Details"):
+        col1, col2 = st.columns(2)
+        
+        with col1:
+            st.markdown("""
+            **Backend Technologies:**
+            - Python 3.9+
+            - SQLite Database
+            - Scikit-learn & XGBoost
+            - Pandas & NumPy
+            - Steam Web API
+            """)
+        
+        with col2:
+            st.markdown("""
+            **Frontend & Deployment:**
+            - Streamlit Dashboard
+            - Plotly Visualizations
+            - Docker Containerization
+            - GitHub Actions CI/CD
+            - Streamlit Cloud Hosting
+            """)
 
 def show_data_pipeline(df, steam_games):
     """Show data collection and processing pipeline"""
