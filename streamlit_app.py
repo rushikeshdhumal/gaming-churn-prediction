@@ -304,7 +304,7 @@ def show_overview(df, steam_games):
                  color_discrete_sequence=px.colors.qualitative.Set3)
     fig.update_traces(texttemplate='%{text}', textposition='outside')
     fig.update_layout(height=400, showlegend=True)
-    fig.update_xaxis(tickangle=45)
+    fig.update_layout(xaxis={'tickangle': 45})
     st.plotly_chart(fig, use_container_width=True)
     
     # Add data summary table
@@ -607,7 +607,7 @@ def show_exploratory_analysis(df):
                      labels={'churned': 'Player Status', 'total_spent': 'Total Spent ($)'},
                      color='churned',
                      color_discrete_map={0: '#28a745', 1: '#dc3545'})
-        fig.update_xaxis(tickvals=[0, 1], ticktext=['Retained', 'Churned'])
+        fig.update_layout(xaxis={'tickvals': [0, 1], 'ticktext': ['Retained', 'Churned']})
         st.plotly_chart(fig, use_container_width=True)
 
 def show_model_prediction(df):
