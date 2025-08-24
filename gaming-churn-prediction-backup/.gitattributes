@@ -1,0 +1,2 @@
+data/raw/steam_games.csv filter=lfs diff=lfs merge=lfs -text
+data/raw/game_recommendations.csv filter=lfs diff=lfs merge=lfs -text

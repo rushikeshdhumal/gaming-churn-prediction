@@ -1,0 +1,105 @@
+# Gaming Player Behavior Analysis & Churn Prediction
+# Development Environment Configuration
+#
+# Author: Rushikesh Dhumal
+# Email: r.dhumal@rutgers.edu
+
+name: development
+
+# Database Configuration
+database:
+  type: sqlite
+  host: localhost
+  port: 5432
+  database: gaming_analytics_dev.db
+  username: ""
+  password: ""
+  pool_size: 5
+  max_overflow: 10
+  echo: true
+
+# API Configuration
+api:
+  steam_api_key: ""  # Set in .env file as STEAM_API_KEY
+  steam_rate_limit: 1.0
+  steam_timeout: 10
+  steam_retries: 3
+  kaggle_username: ""  # Set in .env file as KAGGLE_USERNAME
+  kaggle_key: ""  # Set in .env file as KAGGLE_KEY
+
+# Model Configuration
+model:
+  random_state: 42
+  test_size: 0.2
+  cv_folds: 3  # Reduced for faster development
+  n_jobs: -1
+  max_features: 50
+  feature_selection_method: kbest
+  models_to_train:
+    - logistic_regression
+    - random_forest
+    - xgboost
+  hyperparameter_tuning: true
+  tuning_method: grid
+  tuning_iterations: 50  # Reduced for development
+  
+  # Performance thresholds
+  min_accuracy: 0.80  # Relaxed for development
+  min_precision: 0.75
+  min_recall: 0.75
+  min_f1_score: 0.75
+  min_roc_auc: 0.80
+
+# Data Configuration
+data:
+  raw_data_path: data/raw
+  processed_data_path: data/processed
+  external_data_path: data/external
+  
+  # Sampling configuration (smaller for development)
+  synthetic_players: 1000
+  steam_games_sample: 1000
+  recommendations_sample: 5000
+  
+  # Data quality
+  missing_threshold: 0.5
+  outlier_method: iqr
+  outlier_multiplier: 3.0
+  
+  # Data validation
+  validate_on_load: true
+  auto_clean: true
+  backup_raw_data: false  # Disabled for development
+
+# Logging Configuration
+logging:
+  level: DEBUG
+  format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+  file_path: logs/gaming_analytics_dev.log
+  max_file_size: 5  # MB (smaller for development)
+  backup_count: 3
+  log_to_console: true
+  log_to_file: true
+
+# Deployment Configuration
+deployment:
+  environment: development
+  debug: true
+  host: localhost
+  port: 8000
+  workers: 1
+  
+  # Model serving
+  model_path: models
+  prediction_batch_size: 100  # Smaller for development
+  prediction_timeout: 30
+  
+  # Monitoring
+  enable_monitoring: false  # Disabled for development
+  metrics_collection: true
+  performance_logging: true
+  
+  # Security
+  api_key_required: false
+  rate_limiting: false
+  max_requests_per_hour: 10000

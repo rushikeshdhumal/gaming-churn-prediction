@@ -16,7 +16,7 @@ import functools
 import traceback
 from datetime import datetime
 from pathlib import Path
-from typing import Dict, Any, Optional, Callable, List
+from typing import Dict, Any, Optional, Callable
 import json
 import threading
 from contextlib import contextmanager
