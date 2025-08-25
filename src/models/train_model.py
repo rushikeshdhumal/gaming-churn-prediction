@@ -109,13 +109,21 @@ class FeaturePreprocessor:
             X_cleaned[numeric_columns].median()
         )
         
-        # Fill categorical columns with mode
-        categorical_columns = X_cleaned.select_dtypes(include=['object']).columns
+        # FIXED: Handle categorical columns properly
+        categorical_columns = X_cleaned.select_dtypes(include=['object', 'category']).columns
         for col in categorical_columns:
             if len(X_cleaned[col].mode()) > 0:
                 X_cleaned[col] = X_cleaned[col].fillna(X_cleaned[col].mode().iloc[0])
             else:
                 X_cleaned[col] = X_cleaned[col].fillna('Unknown')
+            
+            # Convert categorical to numeric using label encoding
+            if X_cleaned[col].dtype == 'object':
+                from sklearn.preprocessing import LabelEncoder
+                le = LabelEncoder()
+                # Handle any remaining NaN values
+                X_cleaned[col] = X_cleaned[col].astype(str)
+                X_cleaned[col] = le.fit_transform(X_cleaned[col])
         
         return X_cleaned
 
