@@ -25,6 +25,20 @@ class FeatureEngineer:
         self.df = df.copy()
         self.original_columns = list(df.columns)
         self.engineered_features = []
+    
+    def _validate_features(self):
+        """Validate and clean engineered features to prevent infinite/extreme values"""
+        for feature in self.engineered_features:
+            if feature in self.df.columns and self.df[feature].dtype in [np.float64, np.float32]:
+                # Replace infinite values with NaN, then fill with 0
+                self.df[feature] = np.where(np.isinf(self.df[feature]), np.nan, self.df[feature])
+                self.df[feature] = self.df[feature].fillna(0)
+                
+                # Cap extremely large values (beyond 99.9th percentile)
+                if not self.df[feature].empty:
+                    upper_bound = self.df[feature].quantile(0.999)
+                    if upper_bound > 0 and not np.isnan(upper_bound):
+                        self.df[feature] = np.clip(self.df[feature], 0, upper_bound)
         
     def create_all_features(self) -> pd.DataFrame:
         """Create all engineered features"""
@@ -45,6 +59,8 @@ class FeatureEngineer:
         logger.info(f"Feature engineering complete. Created {len(self.engineered_features)} new features")
         logger.info(f"Final dataset shape: {self.df.shape}")
         
+        # Validate features to ensure no infinite or extreme values
+        self._validate_features()
         return self.df
     
     def create_engagement_features(self):
@@ -64,16 +80,18 @@ class FeatureEngineer:
         self.df['activity_recency'] = np.exp(-self.df.get('last_login_days_ago', 30) / 7)
         
         # Session quality metrics
+        sessions_per_week = np.maximum(self.df.get('sessions_last_week', 1), 0.1)  # Prevent tiny denominators
         self.df['session_quality'] = np.where(
             self.df.get('avg_session_duration', 0) > 0,
-            self.df.get('total_playtime_hours', 0) / (self.df.get('sessions_last_week', 1) * 4),  # Avg weekly sessions
+            np.clip(self.df.get('total_playtime_hours', 0) / (sessions_per_week * 4), 0, 100),  # Cap at reasonable max
             0
         )
         
         # Achievement rate per hour
+        playtime_safe = np.maximum(self.df.get('total_playtime_hours', 1), 0.1)  # Prevent division by tiny numbers
         self.df['achievement_rate'] = np.where(
             self.df.get('total_playtime_hours', 0) > 0,
-            self.df.get('achievements_unlocked', 0) / self.df.get('total_playtime_hours', 1),
+            np.clip(self.df.get('achievements_unlocked', 0) / playtime_safe, 0, 10),  # Cap at 10 achievements/hour
             0
         )
         
@@ -107,9 +125,13 @@ class FeatureEngineer:
         )
         
         # Gaming consistency - how regular is the playing pattern
+        sessions_safe = np.maximum(self.df.get('sessions_last_week', 1), 1)
+        playtime_safe = np.maximum(self.df.get('total_playtime_hours', 1), 0.1)
+        avg_session_time = playtime_safe / sessions_safe
+
         self.df['gaming_consistency'] = np.where(
             self.df.get('sessions_last_week', 0) > 0,
-            self.df.get('avg_session_duration', 0) / (self.df.get('total_playtime_hours', 1) / self.df.get('sessions_last_week', 1)),
+            np.clip(self.df.get('avg_session_duration', 0) / avg_session_time, 0, 5),  # Cap at reasonable ratio
             0
         )
         
@@ -178,9 +200,10 @@ class FeatureEngineer:
         )
         
         # Session frequency relative to account age
+        days_safe = np.maximum(self.df.get('days_since_registration', 1), 7)  # At least 1 week
         self.df['session_frequency'] = np.where(
             self.df.get('days_since_registration', 1) > 0,
-            self.df.get('sessions_last_week', 0) * 52 / self.df.get('days_since_registration', 1),
+            np.clip(self.df.get('sessions_last_week', 0) * 52 / days_safe, 0, 50),  # Cap at 50 sessions/week avg
             0
         )
         
@@ -256,16 +279,18 @@ class FeatureEngineer:
         )
         
         # Spending momentum (recent vs total)
+        total_spent_safe = np.maximum(self.df.get('total_spent', 1), 0.01)  # Minimum $0.01
         self.df['spending_momentum'] = np.where(
             self.df.get('total_spent', 0) > 0,
-            self.df.get('purchases_last_month', 0) * 30 / self.df.get('total_spent', 1),
+            np.clip(self.df.get('purchases_last_month', 0) * 30 / total_spent_safe, 0, 100),  # Cap momentum
             0
         )
         
         # ROI perception (playtime return on spending)
+        total_spent_safe = np.maximum(self.df.get('total_spent', 1), 0.01)
         self.df['perceived_roi'] = np.where(
             self.df.get('total_spent', 0) > 0,
-            self.df.get('total_playtime_hours', 0) / self.df.get('total_spent', 1),
+            np.clip(self.df.get('total_playtime_hours', 0) / total_spent_safe, 0, 1000),  # Cap at 1000 hours/$
             self.df.get('total_playtime_hours', 0)
         )
         
