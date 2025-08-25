@@ -388,12 +388,13 @@ class GamingAnalyticsDB:
                 if 'registration_date' in player_data.columns:
                     player_data['registration_date'] = pd.to_datetime(player_data['registration_date']).dt.date
                 
-                # Calculate last_login from last_login_days_ago if present
+                # FIXED: Calculate last_login from last_login_days_ago if present
                 if 'last_login_days_ago' in player_data.columns:
+                    # Convert to datetime first, then to date
+                    base_date = pd.Timestamp.now()
                     player_data['last_login'] = (
-                        pd.Timestamp.now().date() - 
-                        pd.to_timedelta(player_data['last_login_days_ago'], unit='days')
-                    )
+                        base_date - pd.to_timedelta(player_data['last_login_days_ago'], unit='days')
+                    ).dt.date
                 
                 # Insert data
                 player_data.to_sql('players', conn, if_exists='append', index=False)
