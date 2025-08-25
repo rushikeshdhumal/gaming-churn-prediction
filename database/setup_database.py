@@ -695,7 +695,7 @@ def setup_database(db_path: str = "gaming_analytics.db",
         db.insert_game_data(sample_games)
         
         # Generate sample player data
-        from ..src.data.data_collector import SyntheticDataGenerator
+        from src.data.data_collector import SyntheticDataGenerator
         generator = SyntheticDataGenerator()
         sample_players = generator.generate_player_data(1000)
         
