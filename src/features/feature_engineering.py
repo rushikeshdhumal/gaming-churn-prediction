@@ -335,10 +335,13 @@ class FeatureEngineer:
             if col in self.df.columns and col not in self.engineered_features:
                 self.df = self.df.drop(columns=[col])
         
-        # Handle missing values in engineered features
+        # FIXED: Handle missing values in engineered features
         for feature in self.engineered_features:
             if feature in self.df.columns:
-                if self.df[feature].dtype in ['object', 'category']:
+                if self.df[feature].dtype.name == 'category':
+                    # For categorical columns, convert to object first, then fill
+                    self.df[feature] = self.df[feature].astype('object').fillna('Unknown')
+                elif self.df[feature].dtype in ['object']:
                     self.df[feature] = self.df[feature].fillna('Unknown')
                 else:
                     self.df[feature] = self.df[feature].fillna(0)
