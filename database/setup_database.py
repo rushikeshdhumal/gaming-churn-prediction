@@ -388,15 +388,20 @@ class GamingAnalyticsDB:
                 if 'registration_date' in player_data.columns:
                     player_data['registration_date'] = pd.to_datetime(player_data['registration_date']).dt.date
                 
-                # FIXED: Calculate last_login from last_login_days_ago if present
+                # Calculate last_login from last_login_days_ago if present
                 if 'last_login_days_ago' in player_data.columns:
-                    # Convert days ago to actual dates
                     base_date = pd.Timestamp.now()
                     player_data['last_login'] = (
                         base_date - pd.to_timedelta(player_data['last_login_days_ago'], unit='days')
                     ).dt.date
-                    # Remove the original column before insertion
+                    # Remove the original column
                     player_data = player_data.drop(columns=['last_login_days_ago'])
+                
+                # Remove columns that don't exist in database schema
+                columns_to_remove = ['engagement_level']  # Internal synthetic data column
+                for col in columns_to_remove:
+                    if col in player_data.columns:
+                        player_data = player_data.drop(columns=[col])
                 
                 # Insert data
                 player_data.to_sql('players', conn, if_exists='append', index=False)
